@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset ="UTF-8">
+    <title>Esosim: Brainfuck/LOLCode/Forth Interpreter</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <h1>EsoSim: Brainfuck/LOLCode/Forth </h1>
+    
+    <select id="languageSelector">
+        <option value="brainfuck">Brainfuck</option>
+        <option value="lolcode">LOLCODE</option>
+        <option value="forth">Forth</option>
+    </select>
+    <textarea id = "code" rows = "10" cols = "80">// paste code here</textarea><br/>
+    <button onclick="runCode()">Run</button>
+    <pre id="output"></pre>
+    <div id="tape"></div>
+
+    <script src ="main.js"></script>
+    <script>
+        function renderTape(tape, pointer) {
+            const tapeEl = document.getElementById("tape");
+            tapeEl.innerHTML = "";
+            for (let i = 0; i < 30; i++) {
+                const cell = document.createElement("div");
+                cell.textContent = tape[i];
+                cell.className = "cell" + (i === pointer ? " active" : "");
+                tapeEl.appendChild(cell);
+            }
+        }   
+        function runCode() {
+            const code = document.getElementById("code").value;
+            const lang = document.getElementById("languageSelector").value;
+            let output = "";
+            if (lang === "brainfuck") {
+                output = runBrainfuck(code, "", renderTape);
+            } else if (lang === "lolcode") {
+                output = runLOLCode(code);
+                renderTape(new Array(30).fill(0), -1);
+            } else if (lang === "forth") {
+                output = runForth(code);
+                renderTape(new Array(30).fill(0), -1);
+            }
+            document.getElementById("output").innerText = output;
+        }
+    </script>
+</body>
+</html>
